@@ -2,6 +2,7 @@ package com.sparta.endpointtesting;
 
 import com.sparta.endpointtesting.pojoconfig.pojos.ProductListResponse;
 import com.sparta.endpointtesting.pojoconfig.pojos.ProductsItem;
+import com.sparta.endpointtesting.utils.Helper;
 import com.sparta.endpointtesting.utils.ApiConfig;
 import io.restassured.RestAssured;
 import io.restassured.parsing.Parser;
@@ -21,38 +22,20 @@ public class GetProductListTest {
 
     @BeforeAll
     static void beforeAll(){
-
-        RestAssured.registerParser("text/html", Parser.JSON);
-
-        response = RestAssured
-                .given()
-                .baseUri(ApiConfig.getBaseUri())
-                .when()
-                .get(ApiConfig.getProductsList())
-                .then()
-                .log().all()
-                .extract().response();
-
+        response = Helper.getAllBrandsList();
         productListResponse = response.as(ProductListResponse.class);
 
-
     }
-
-
 
     @Test
     @DisplayName("Status code 200 returned")
     void testStatusCode200(){
-
-        System.out.println(response.jsonPath().getList("products"));
         MatcherAssert.assertThat(productListResponse.getResponseCode(), Matchers.is(200));
     }
 
     @Test
     @DisplayName("When requesting all products and list is returned with all of them.")
     void testAllProductsReturned(){
-        System.out.println(response.jsonPath().getList("products"));
-//        MatcherAssert.assertThat(response.jsonPath().getList("products").size(), Matchers.is(34));
         MatcherAssert.assertThat(productListResponse.getProducts().size(), Matchers.is(34));
     }
 
