@@ -22,7 +22,7 @@ public class UserDetailsIntegrationTest {
 
         String validEmail = "test@test.com";
 
-        Response response = apiClient.getUserDetailByEmailrequest(validEmail);
+        Response response = apiClient.getUserDetailByEmail(validEmail);
 
         Assertions.assertEquals(200, response.getStatusCode());
 
@@ -44,7 +44,7 @@ public class UserDetailsIntegrationTest {
 
         String invalidEmail = "invalid-user-12345@test.com";
 
-        Response response = apiClient.getUserDetailByEmailrequest(invalidEmail);
+        Response response = apiClient.getUserDetailByEmail(invalidEmail);
 
         Assertions.assertEquals(200, response.getStatusCode());
 
