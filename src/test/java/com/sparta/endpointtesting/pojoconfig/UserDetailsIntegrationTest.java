@@ -1,6 +1,5 @@
-package com.sparta.api_testing_project.integration;
-
-import com.sparta.api_testing_project.client.ApiClient;
+package com.sparta.endpointtesting.pojoconfig;
+import com.spart.endpointtesting.utils.Helper;
 import com.sparta.endpointtesting.pojoconfig.pojos.UserDetailsResponse;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Assertions;
@@ -10,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 public class UserDetailsIntegrationTest {
 
-    private static ApiClient apiClient;
+    private static Helper apiClient;
 
     @BeforeAll
     static void setup() {
@@ -40,7 +39,7 @@ public class UserDetailsIntegrationTest {
     }
 
     @Test
-    @DisplayName("GET /getUserDetailByEmail returns payload 404 for an invalid email")
+    @DisplayName("GET / returns payload 404 for an invalid email")
     void testGetUserDetailsSadPath() {
 
         String invalidEmail = "invalid-user-12345@test.com";

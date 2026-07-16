@@ -2,6 +2,9 @@ package com.sparta.endpointtesting;
 
 import com.sparta.endpointtesting.pojoconfig.pojos.BrandList;
 import com.sparta.endpointtesting.pojoconfig.pojos.BrandsItem;
+import com.sparta.endpointtesting.pojoconfig.pojos.ProductListResponse;
+import com.sparta.endpointtesting.pojoconfig.pojos.ProductsItem;
+import com.sparta.endpointtesting.utils.ApiConfig;
 import com.sparta.endpointtesting.utils.Helper;
 import io.restassured.RestAssured;
 import io.restassured.parsing.Parser;

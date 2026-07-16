@@ -87,6 +87,15 @@ public class Helper {
                 .build();
     }
 
+    public Response getUserDetailByEmail(String email) {
+        return RestAssured
+                .given()
+                .baseUri(BASE_URL)
+                .queryParam("email", email)
+                .when()
+                .get(ApiConfig.getUserDetailByEmail());
+    }
+
     public static Response getAllBrandsList() {
         RestAssured.registerParser("text/html", Parser.JSON);
         return response = RestAssured
