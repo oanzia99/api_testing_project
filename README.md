@@ -60,25 +60,44 @@ api_testing_project
       │         │    └── integration                 # RestAssured integration tests
       │         │         ├── BrandsIntegrationTest.java
       │         │         ├── ProductsIntegrationTest.java
-      │         │         └── SearchIntegrationTest.java
+      │         │         ├── SearchIntegrationTest.java
+      │         │         └── UserDetailsIntegrationTest.java # User details API integration checks
       │         ├── endpointtesting
       │         │    ├── pojoconfig                  # Team-defined POJO mappings
       │         │    │    └── pojos
+      │         │    │         ├── BrandList.java
+      │         │    │         ├── BrandsItem.java
       │         │    │         ├── Category.java
       │         │    │         ├── ProductListResponse.java
       │         │    │         ├── ProductsItem.java
+      │         │    │         ├── UserDetails.java
+      │         │    │         ├── UserDetailsResponse.java
       │         │    │         └── Usertype.java
       │         │    ├── utils
       │         │    │    ├── ApiConfig.java          # Loads environment configuration
       │         │    │    └── Helper.java             # Shared request specifications helper
       │         │    ├── GetProductListTest.java     # User Story 1 (GET products list checks)
-      │         │    └── SearchProductUserStoryTest.java # User Story 3 (Search validations TC3.1-TC3.4)
+      │         │    ├── SearchProductUserStoryTest.java # User Story 3 (Search validations TC3.1-TC3.4)
+      │         │    └── UpdateUserAccountTest.java  # User Story 5 (Account update PUT checks)
       │         └── utils
       │              ├── GitHubConfig.java           # Reads GitHub configuration settings
       │              └── GitHubApi.java              # Configures spec builders for GitHub comments
       └── resources
            └── config.properties                     # Environment properties loader config
 ```
+
+### 📂 Team Endpoint Testing & POJO Package Structure
+The `com.sparta.endpointtesting` package organizes the team's custom models and endpoint validations:
+*   **POJOs (`pojoconfig/pojos`)**:
+    *   `ProductListResponse` / `ProductsItem`: Wraps the store's complete product listings.
+    *   `BrandList` / `BrandsItem`: Models the manufacturer brands catalog payload.
+    *   `UserDetailsResponse` / `UserDetails`: Deserialises client details (name, email, shipping/billing address) for user endpoints.
+    *   `Category` / `Usertype`: Handles inner nested category properties.
+*   **User Story Tests**:
+    *   `GetProductListTest`: Tests products retrieval happy/sad paths (User Story 1).
+    *   `SearchProductUserStoryTest`: Validates keywords search and missing parameter payloads (User Story 3).
+    *   `UpdateUserAccountTest`: Checks user profile details update operations (User Story 5).
+
 
 ---
 
