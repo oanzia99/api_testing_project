@@ -47,6 +47,12 @@ public class Helper {
                 )).build();
     }
 
+    public static RequestSpecification verifyLoginRequestSpecifyFormParams(Map<String, String> formParams) {
+        return getBaseSpecBuilder(VERIFY_LOGIN_PATH)
+                .addFormParams(formParams)
+                .build();
+    }
+
     public static RequestSpecification createAccountRequest(String email, String password) {
         return getBaseSpecBuilder(CREATE_ACCOUNT_PATH)
                 .addFormParams(Map.of(
@@ -61,7 +67,7 @@ public class Helper {
                         "email", email,
                         "password", password
                 )).build();
-    }*/
+    }
 
     public static RequestSpecification updateAccountRequest(String name, String email, String password,
                                                             String firstName, String lastName) {
@@ -176,6 +182,28 @@ public class Helper {
                 .put()
                 .then()
                 .log().all()
+                .extract().response();
+    }
+
+    public static Response postVerifyLogin(String email, String password) {
+        RestAssured.registerParser("text/html", Parser.JSON);
+        return response = RestAssured
+                .given()
+                .spec(verifyLoginRequest(email, password))
+                .when()
+                .post()
+                .then()
+                .extract().response();
+    }
+
+    public static Response postVerifyLoginSpecifyParams(Map<String, String> formParams) {
+        RestAssured.registerParser("text/html", Parser.JSON);
+        return response = RestAssured
+                .given()
+                .spec(verifyLoginRequestSpecifyFormParams(formParams))
+                .when()
+                .post()
+                .then()
                 .extract().response();
     }
 }
