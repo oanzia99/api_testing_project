@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 public class UpdateUserAccountTest {
     private static Response updateHappyPath;
+    private static Response checkHappyPath;
 
     @BeforeAll
     static void setUp() {
@@ -21,9 +22,10 @@ public class UpdateUserAccountTest {
                 "salah@salah.com",
                 "password123",
                 "Salah",
-                "ExampleLastName"
+                "ExampleLastName1"
         );
         System.out.println(updateHappyPath);
+        checkHappyPath = Helper.getUserDetailByEmail("salah@salah.com");
     }
 
     @Test
@@ -36,10 +38,12 @@ public class UpdateUserAccountTest {
     @DisplayName("Check if the correct message is returned after updating User last name")
     void checkCorrectMessageAfterUpdatingUserLastName() {
         MatcherAssert.assertThat(updateHappyPath.jsonPath().getString("message"), Matchers.is("User updated!"));
+
     }
 
     @Test
     @DisplayName("Check if the details have been correctly updated with a get request")
     void checkDetails() {
+        MatcherAssert.assertThat(checkHappyPath.jsonPath().getString("user.last_name"), Matchers.is("ExampleLastName1"));
     }
 }

@@ -72,13 +72,24 @@ public class Helper {
     public static RequestSpecification updateAccountRequest(String name, String email, String password,
                                                             String firstName, String lastName) {
         return getBaseSpecBuilder(UPDATE_ACCOUNT_PATH)
-                .addFormParams(Map.of(
-                        "name", name,
-                        "email", email,
-                        "password", password,
-                        "first_name", firstName,
-                        "last_name", lastName
-                )).build();
+                .addFormParam("name", name)
+                .addFormParam("email", email)
+                .addFormParam("password", password)
+                .addFormParam("title", "Mr")
+                .addFormParam("birth_date", "10")
+                .addFormParam("birth_month", "5")
+                .addFormParam("birth_year", "1995")
+                .addFormParam("firstname", firstName)
+                .addFormParam("lastname", lastName)
+                .addFormParam("company", "Sparta")
+                .addFormParam("address1", "1 Test Street")
+                .addFormParam("address2", "London")
+                .addFormParam("country", "United Kingdom")
+                .addFormParam("zipcode", "SW1A 1AA")
+                .addFormParam("state", "London")
+                .addFormParam("city", "London")
+                .addFormParam("mobile_number", "07123456789")
+                .build();
     }
 
     public static RequestSpecification getUserDetailByEmailRequest(String email) {

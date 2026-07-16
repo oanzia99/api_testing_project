@@ -1,6 +1,8 @@
 package com.sparta.endpointtesting.pojoconfig;
 import com.sparta.endpointtesting.utils.Helper;
 import com.sparta.endpointtesting.pojoconfig.pojos.UserDetailsResponse;
+import io.restassured.RestAssured;
+import io.restassured.parsing.Parser;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -13,7 +15,7 @@ public class UserDetailsIntegrationTest {
     @Test
     @DisplayName("GET /getUserDetailByEmail returns 200 and correct user details")
     void testGetUserDetailsHappyPath() {
-
+        RestAssured.registerParser("text/html", Parser.JSON);
         String validEmail = "test@test.com";
 
         Response response = Helper.getUserDetailByEmail(validEmail);
