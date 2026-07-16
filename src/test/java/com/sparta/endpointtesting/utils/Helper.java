@@ -90,7 +90,7 @@ public class Helper {
     public Response getUserDetailByEmail(String email) {
         return RestAssured
                 .given()
-                .baseUri(BASE_URL)
+                .baseUri(BASE_URI)
                 .queryParam("email", email)
                 .when()
                 .get(ApiConfig.getUserDetailByEmail());
