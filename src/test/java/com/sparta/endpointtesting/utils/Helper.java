@@ -55,7 +55,6 @@ public class Helper {
                 )).build();
     }
 
-// Don't know parameters for these will update later
     public static RequestSpecification deleteAccountRequest(String email, String password) {
         return getBaseSpecBuilder(DELETE_ACCOUNT_PATH)
                 .addFormParams(Map.of(
@@ -63,14 +62,18 @@ public class Helper {
                         "password", password
                 )).build();
     }
-/*
-    public static RequestSpecification updateAccountRequest(String email, String password) {
+
+    public static RequestSpecification updateAccountRequest(String name, String email, String password,
+                                                            String firstName, String lastName) {
         return getBaseSpecBuilder(UPDATE_ACCOUNT_PATH)
                 .addFormParams(Map.of(
+                        "name", name,
                         "email", email,
-                        "password", password
+                        "password", password,
+                        "first_name", firstName,
+                        "last_name", lastName
                 )).build();
-    } */
+    }
 
     public static RequestSpecification getUserDetailByEmailRequest(String email) {
         return getBaseSpecBuilder(USER_DETAIL_BY_EMAIL_PATH)
@@ -164,6 +167,16 @@ public class Helper {
                 .addFormParam("city", "London")
                 .addFormParam("mobile_number", "07123456789")
                 .build();
+    }
+    public static Response putUpdateAccountRequest(String name, String email, String password, String firstName, String lastName) {
+        return RestAssured
+                .given()
+                .spec(updateAccountRequest(name, email, password, firstName, lastName))
+                .when()
+                .put()
+                .then()
+                .log().all()
+                .extract().response();
     }
 }
 
