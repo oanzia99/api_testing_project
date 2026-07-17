@@ -1,7 +1,8 @@
-package com.sparta.api_testing_project.integration;
-
-import com.sparta.api_testing_project.client.ApiClient;
+package com.sparta.endpointtesting.pojoconfig;
+import com.sparta.endpointtesting.utils.Helper;
 import com.sparta.endpointtesting.pojoconfig.pojos.UserDetailsResponse;
+import io.restassured.RestAssured;
+import io.restassured.parsing.Parser;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -10,20 +11,14 @@ import org.junit.jupiter.api.Test;
 
 public class UserDetailsIntegrationTest {
 
-    private static ApiClient apiClient;
-
-    @BeforeAll
-    static void setup() {
-        apiClient = new ApiClient();
-    }
 
     @Test
     @DisplayName("GET /getUserDetailByEmail returns 200 and correct user details")
     void testGetUserDetailsHappyPath() {
-
+        RestAssured.registerParser("text/html", Parser.JSON);
         String validEmail = "test@test.com";
 
-        Response response = apiClient.getUserDetailByEmail(validEmail);
+        Response response = Helper.getUserDetailByEmail(validEmail);
 
         Assertions.assertEquals(200, response.getStatusCode());
 
@@ -40,12 +35,12 @@ public class UserDetailsIntegrationTest {
     }
 
     @Test
-    @DisplayName("GET /getUserDetailByEmail returns payload 404 for an invalid email")
+    @DisplayName("GET / returns payload 404 for an invalid email")
     void testGetUserDetailsSadPath() {
 
         String invalidEmail = "invalid-user-12345@test.com";
 
-        Response response = apiClient.getUserDetailByEmail(invalidEmail);
+        Response response = Helper.getUserDetailByEmail(invalidEmail);
 
         Assertions.assertEquals(200, response.getStatusCode());
 

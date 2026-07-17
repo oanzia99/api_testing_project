@@ -1,6 +1,7 @@
-package com.sparta.endpointtesting.utils;
+package com.sparta.endpointtesting;
 
 import com.sparta.endpointtesting.pojoconfig.pojos.AccountResponse;
+import com.sparta.endpointtesting.utils.Helper;
 import io.restassured.RestAssured;
 import io.restassured.parsing.Parser;
 import io.restassured.response.Response;
