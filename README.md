@@ -9,8 +9,7 @@
   <img src="https://img.shields.io/badge/Maven-3.9+-blue?style=for-the-badge&logo=apachemaven&logoColor=white" alt="Maven" />
   <img src="https://img.shields.io/badge/REST--Assured-5.5.0-green?style=for-the-badge" alt="Rest-Assured" />
   <img src="https://img.shields.io/badge/JUnit5-5.11-red?style=for-the-badge&logo=junit5&logoColor=white" alt="JUnit 5" />
-  <img src="https://img.shields.io/badge/Mockito-5.23-blueviolet?style=for-the-badge" alt="Mockito" />
-  <img src="https://img.shields.io/badge/Tests-40%20%2F%2040%20Passed-brightgreen?style=for-the-badge" alt="40 Tests Passed" />
+  <img src="https://img.shields.io/badge/Tests-34%20%2F%2034%20Passed-brightgreen?style=for-the-badge" alt="34 Tests Passed" />
 </p>
 
 ---
@@ -31,9 +30,8 @@
 ## ✨ Key Features
 
 *   **POJO Response Mapping**: Uses Jackson `ObjectMapper` for precise serialisation and deserialisation of API responses.
-*   **Decoupled ApiClient**: Isolates HTTP requests and RestAssured settings from the assertions layer.
+*   **Centralised Request Specification Builder**: Unifies RestAssured settings (headers, credentials, query params) inside a utility class.
 *   **Automated Content-Type Parsing**: Registers a custom global parser to handle standard HTML-based payloads safely.
-*   **Mockito Mocking**: Runs fast offline unit tests for business logic without firing real HTTP requests.
 *   **Comprehensive Coverage**: Validates user stories, happy/sad paths, custom HTTP statuses, and JSON schema boundaries.
 
 ---
@@ -47,49 +45,30 @@ api_testing_project
  └── src/test
       ├── java
       │    └── com.sparta
-      │         ├── api_testing_project
-      │         │    ├── client
-      │         │    │    └── ApiClient.java          # Decoupled HTTP API client
-      │         │    ├── pojos                       # JSON Response mapping models
-      │         │    │    ├── Brand.java
-      │         │    │    ├── BrandResponse.java
-      │         │    │    ├── Category.java
-      │         │    │    ├── Product.java
-      │         │    │    ├── ProductResponse.java
-      │         │    │    └── UserType.java
-      │         │    ├── service
-      │         │    │    └── ProductService.java     # Filters and parses product lists
-      │         │    └── integration                 # RestAssured integration tests
-      │         │         ├── BrandsIntegrationTest.java
-      │         │         ├── ProductsIntegrationTest.java
-      │         │         ├── SearchIntegrationTest.java
-      │         │         └── UserDetailsIntegrationTest.java # User details API integration checks
-      │         ├── endpointtesting
-      │         │    ├── pojoconfig                  # Team-defined POJO mappings
-      │         │    │    └── pojos
-      │         │    │         ├── AccountResponse.java
-      │         │    │         ├── BrandList.java
-      │         │    │         ├── BrandsItem.java
-      │         │    │         ├── Category.java
-      │         │    │         ├── ProductListResponse.java
-      │         │    │         ├── ProductsItem.java
-      │         │    │         ├── UserDetails.java
-      │         │    │         ├── UserDetailsResponse.java
-      │         │    │         ├── VerifyUserResponse.java
-      │         │    │         └── Usertype.java
-      │         │    ├── utils
-      │         │    │    ├── ApiConfig.java          # Loads environment configuration
-      │         │    │    └── Helper.java             # Shared request specifications helper
-      │         │    ├── CreateAccountTest.java      # User Story 6 (POST create account checks)
-      │         │    ├── DeleteAccountTest.java      # User Story 6 (DELETE account checks)
-      │         │    ├── GetBrandTest.java           # User Story 2 (GET brands catalog checks)
-      │         │    ├── GetProductListTest.java     # User Story 1 (GET products list checks)
-      │         │    ├── SearchProductUserStoryTest.java # User Story 3 (Search validations TC3.1-TC3.4)
-      │         │    ├── UpdateUserAccountTest.java  # User Story 5 (Account update PUT checks)
-      │         │    └── VerifyUserLoginTest.java    # User Story 4 (POST login credentials checks)
-      │         └── utils
-      │              ├── GitHubConfig.java           # Reads GitHub configuration settings
-      │              └── GitHubApi.java              # Configures spec builders for GitHub comments
+      │         └── endpointtesting
+      │              ├── pojoconfig                  # Team POJO mappings & tests
+      │              │    ├── pojos
+      │              │    │    ├── AccountResponse.java
+      │              │    │    ├── BrandList.java
+      │              │    │    ├── BrandsItem.java
+      │              │    │    ├── Category.java
+      │              │    │    ├── ProductListResponse.java
+      │              │    │    ├── ProductsItem.java
+      │              │    │    ├── UserDetails.java
+      │              │    │    ├── UserDetailsResponse.java
+      │              │    │    └── VerifyUserResponse.java
+      │              │    └── UserDetailsIntegrationTest.java # User details schema & response checks
+      │              ├── utils
+      │              │    ├── ApiConfig.java          # Loads environment configuration
+      │              │    └── Helper.java             # Shared request specifications helper
+      │              ├── CreateAccountTest.java      # User Story 6 (POST create account checks)
+      │              ├── DeleteAccountTest.java      # User Story 6 (DELETE account checks)
+      │              ├── GetBrandTest.java           # User Story 2 (GET brands catalog checks)
+      │              ├── GetProductListTest.java     # User Story 1 (GET products list checks)
+      │              ├── SearchProductPojoTest.java  # User Story 3 (Search response POJO checks)
+      │              ├── SearchProductUserStoryTest.java # User Story 3 (Search validations TC3.1-TC3.4)
+      │              ├── UpdateUserAccountTest.java  # User Story 5 (Account update PUT checks)
+      │              └── VerifyUserLoginTest.java    # User Story 4 (POST login credentials checks)
       └── resources
            └── config.properties                     # Environment properties loader config
 ```
@@ -115,16 +94,16 @@ The `com.sparta.endpointtesting` package organizes the team's custom models and 
 
 ## 🧪 Test Suite Coverage
 
-The test suite validates multiple aspects of the platform divided into decoupled integration layers and Scrum User Stories:
+The test suite validates multiple aspects of the platform divided into Scrum User Stories:
 
 | Scrum Story | Target Endpoint | Test Class Name | Test Focus & Strategy | Status |
 | :--- | :--- | :--- | :--- | :---: |
-| **US 1: Catalog** | `GET /productsList` | `GetProductListTest` & `ProductsIntegrationTest` | Full catalog retrieval, schema field validation & unsupported POST blocks | **Passed (6 Tests)** |
-| **US 2: Brands** | `GET /brandsList` | `GetBrandTest` & `BrandsIntegrationTest` | Brand listings retrieval, ID/name completion & unsupported PUT blocks | **Passed (5 Tests)** |
-| **US 3: Search** | `POST /searchProduct` | `SearchProductUserStoryTest` & `SearchProductPojoTest` | Keyword matching, missing parameter payloads, 400 error codes & Jackson schemas | **Passed (8 Tests)** |
+| **US 1: Catalog** | `GET /productsList` | `GetProductListTest` | Full catalog retrieval, schema field validation & unsupported POST blocks | **Passed (4 Tests)** |
+| **US 2: Brands** | `GET /brandsList` | `GetBrandTest` | Brand listings retrieval, ID/name completion & unsupported PUT blocks | **Passed (3 Tests)** |
+| **US 3: Search** | `POST /searchProduct` | `SearchProductUserStoryTest` & `SearchProductPojoTest` | Keyword matching, missing parameter payloads, 400 error codes & Jackson schemas | **Passed (6 Tests)** |
 | **US 4: Login** | `POST /verifyLogin` | `VerifyUserLoginTest` | Credential authentication verification & missing param checks | **Passed (5 Tests)** |
-| **US 5: Profile** | `PUT /updateAccount` | `UpdateUserAccountTest` & `UserDetailsIntegrationTest` | Profile modification, validation updates & email queries | **Passed (8 Tests)** |
-| **US 6: Account** | `POST /createAccount` & `DELETE /deleteAccount` | `CreateAccountTest` & `DeleteAccountTest` | User registration flow, payload parsing & teardown cleanups | **Passed (8 Tests)** |
+| **US 5: Profile** | `PUT /updateAccount` | `UpdateUserAccountTest` & `UserDetailsIntegrationTest` | Profile modification, validation updates & email queries | **Passed (5 Tests)** |
+| **US 6: Account** | `POST /createAccount` & `DELETE /deleteAccount` | `CreateAccountTest` & `DeleteAccountTest` | User registration flow, payload parsing & teardown cleanups | **Passed (11 Tests)** |
 
 ---
 
@@ -135,96 +114,68 @@ classDiagram
     direction TB
 
     %% Model / POJO Layer
-    class ProductResponse {
+    class ProductListResponse {
         -int responseCode
-        -List~Product~ products
-        +getResponseCode() int
-        +getProducts() List~Product~
+        -List~ProductsItem~ products
     }
 
-    class Product {
+    class ProductsItem {
         -int id
         -String name
         -String price
         -String brand
         -Category category
-        +getPriceAsDouble() double
     }
 
     class Category {
-        -UserType usertype
+        -Usertype usertype
         -String category
     }
 
-    class UserType {
+    class Usertype {
         -String usertype
     }
 
-    class BrandResponse {
+    class BrandList {
         -int responseCode
-        -List~Brand~ brands
+        -List~BrandsItem~ brands
     }
 
-    class Brand {
+    class BrandsItem {
         -int id
         -String brand
     }
 
-    ProductResponse "1" *-- "many" Product
-    Product "1" *-- "1" Category
-    Category "1" *-- "1" UserType
-    BrandResponse "1" *-- "many" Brand
-
-    %% Client and Service Layer
-    class ApiClient {
-        -String BASE_URL
-        +getAllProducts() Response
-        +postAllProducts() Response
-        +getAllBrands() Response
-        +putAllBrands() Response
-        +searchProduct(String query) Response
-        +searchProductMissingParam() Response
+    class UserDetailsResponse {
+        -int responseCode
+        -UserDetails user
     }
 
-    class ProductService {
-        -ApiClient apiClient
-        +filterProductsByBrand(String brandName) List~Product~
-        +getProductsCheaperThan(double maxPrice) List~Product~
+    class UserDetails {
+        -int id
+        -String name
+        -String email
+        -String firstName
+        -String lastName
     }
 
-    ProductService o-- ApiClient : "uses constructor injection"
+    ProductListResponse "1" *-- "many" ProductsItem
+    ProductsItem "1" *-- "1" Category
+    Category "1" *-- "1" Usertype
+    BrandList "1" *-- "many" BrandsItem
+    UserDetailsResponse "1" *-- "1" UserDetails
 
-    %% Tests Layer
-    class ProductServiceUnitTest {
-        -ApiClient apiClient
-        -Response mockResponse
-        -ProductService productService
-        +testFilterProductsByBrand()
-        +testGetProductsCheaperThan()
+    %% Utils Layer
+    class ApiConfig {
+        +getBaseUri() String
+        +getAllProductsList() String
     }
 
-    class ProductsIntegrationTest {
-        -ApiClient apiClient
-        +testGetProductsListHappyPath()
-        +testPostProductsListSadPath()
+    class Helper {
+        +getProductsListRequest() RequestSpecification
+        +getListOfBrands() Response
+        +searchProductsRequest(String query) RequestSpecification
     }
-
-    class BrandsIntegrationTest {
-        -ApiClient apiClient
-        +testGetBrandsListHappyPath()
-        +testPutBrandsListSadPath()
-    }
-
-    class SearchIntegrationTest {
-        -ApiClient apiClient
-        +testSearchProductHappyPath()
-        +testSearchProductSadPath()
-    }
-
-    ProductServiceUnitTest ..> ProductService : "unit tests"
-    ProductsIntegrationTest ..> ApiClient : "integrates"
-    BrandsIntegrationTest ..> ApiClient : "integrates"
-    SearchIntegrationTest ..> ApiClient : "integrates"
 ```
 
 ---
@@ -261,8 +212,6 @@ When extending this framework or introducing updates:
     *   Integrate to `main` via reviewed Pull Requests.
 2.  **POJO Integrity**:
     *   Reflect any endpoint updates in the `pojos` package.
-3.  **Offline Logic Testing**:
-    *   Write Mockito unit tests in the `unit` package for any logic processing to avoid relying on external resources during fast test runs.
 
 ---
 
