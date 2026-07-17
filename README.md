@@ -10,6 +10,7 @@
   <img src="https://img.shields.io/badge/REST--Assured-5.5.0-green?style=for-the-badge" alt="Rest-Assured" />
   <img src="https://img.shields.io/badge/JUnit5-5.11-red?style=for-the-badge&logo=junit5&logoColor=white" alt="JUnit 5" />
   <img src="https://img.shields.io/badge/Mockito-5.23-blueviolet?style=for-the-badge" alt="Mockito" />
+  <img src="https://img.shields.io/badge/Tests-40%20%2F%2040%20Passed-brightgreen?style=for-the-badge" alt="40 Tests Passed" />
 </p>
 
 ---
@@ -17,22 +18,23 @@
 ## 📖 Table of Contents
 1. [Key Features](#-key-features)
 2. [Project Architecture](#-project-architecture)
-3. [Class Diagram](#-class-diagram)
-4. [Getting Started](#-getting-started)
-5. [CI/CD Pipeline](#-cicd-pipeline)
-6. [Collaboration & Hand-over](#-collaboration--hand-over)
-7. [Full Stack Analysis & Security Guidelines](#-full-stack-analysis--security-guidelines)
-8. [Meet the Collaborators](#-meet-the-collaborators)
+3. [Test Suite Coverage](#-test-suite-coverage)
+4. [Class Diagram](#-class-diagram)
+5. [Getting Started](#-getting-started)
+6. [CI/CD Pipeline](#-cicd-pipeline)
+7. [Collaboration & Hand-over](#-collaboration--hand-over)
+8. [Full Stack Analysis & Security Guidelines](#-full-stack-analysis--security-guidelines)
+9. [Meet the Collaborators](#-meet-the-collaborators)
 
 ---
 
 ## ✨ Key Features
 
-*   **POJO Response Mapping**: Uses Jackson ObjectMapper for precise serialisation and deserialisation of API responses.
+*   **POJO Response Mapping**: Uses Jackson `ObjectMapper` for precise serialisation and deserialisation of API responses.
 *   **Decoupled ApiClient**: Isolates HTTP requests and RestAssured settings from the assertions layer.
 *   **Automated Content-Type Parsing**: Registers a custom global parser to handle standard HTML-based payloads safely.
 *   **Mockito Mocking**: Runs fast offline unit tests for business logic without firing real HTTP requests.
-*   **Comprehensive Coverage**: Tests multiple endpoints (`/productsList`, `/brandsList`, `/searchProduct`) under both happy and sad path scenarios.
+*   **Comprehensive Coverage**: Validates user stories, happy/sad paths, custom HTTP statuses, and JSON schema boundaries.
 
 ---
 
@@ -99,7 +101,7 @@ The `com.sparta.endpointtesting` package organizes the team's custom models and 
     *   `BrandList` / `BrandsItem`: Models the manufacturer brands catalog payload.
     *   `UserDetailsResponse` / `UserDetails`: Deserialises client details (name, email, shipping/billing address) for user endpoints.
     *   `AccountResponse`: Models responses for account registration/creation and deletion.
-    *   `VerifyUserResponse`: Deserialises authentication payloads for verification checks.
+    *   `VerifyUserResponse`: Deserialises authentication payloads for verification login checks.
     *   `Category` / `Usertype`: Handles inner nested category properties.
 *   **User Story Tests**:
     *   `GetProductListTest`: Tests products retrieval happy/sad paths (User Story 1).
@@ -109,7 +111,20 @@ The `com.sparta.endpointtesting` package organizes the team's custom models and 
     *   `UpdateUserAccountTest`: Checks user profile details update operations (User Story 5).
     *   `CreateAccountTest` / `DeleteAccountTest`: Verifies user registration and profile deletion endpoint behaviors (User Story 6).
 
+---
 
+## 🧪 Test Suite Coverage
+
+The test suite validates multiple aspects of the platform divided into decoupled integration layers and Scrum User Stories:
+
+| Scrum Story | Target Endpoint | Test Class Name | Test Focus & Strategy | Status |
+| :--- | :--- | :--- | :--- | :---: |
+| **US 1: Catalog** | `GET /productsList` | `GetProductListTest` & `ProductsIntegrationTest` | Full catalog retrieval, schema field validation & unsupported POST blocks | **Passed (6 Tests)** |
+| **US 2: Brands** | `GET /brandsList` | `GetBrandTest` & `BrandsIntegrationTest` | Brand listings retrieval, ID/name completion & unsupported PUT blocks | **Passed (5 Tests)** |
+| **US 3: Search** | `POST /searchProduct` | `SearchProductUserStoryTest` & `SearchProductPojoTest` | Keyword matching, missing parameter payloads, 400 error codes & Jackson schemas | **Passed (8 Tests)** |
+| **US 4: Login** | `POST /verifyLogin` | `VerifyUserLoginTest` | Credential authentication verification & missing param checks | **Passed (5 Tests)** |
+| **US 5: Profile** | `PUT /updateAccount` | `UpdateUserAccountTest` & `UserDetailsIntegrationTest` | Profile modification, validation updates & email queries | **Passed (8 Tests)** |
+| **US 6: Account** | `POST /createAccount` & `DELETE /deleteAccount` | `CreateAccountTest` & `DeleteAccountTest` | User registration flow, payload parsing & teardown cleanups | **Passed (8 Tests)** |
 
 ---
 
@@ -220,7 +235,7 @@ classDiagram
 Make sure **JDK 21** and **Maven** are installed on your machine.
 
 ### Run Tests
-To download dependencies, compile codebase, and run the test suite:
+To download dependencies, compile the codebase, and execute the test suite:
 ```bash
 mvn clean test
 ```
@@ -253,25 +268,25 @@ When extending this framework or introducing updates:
 
 ## 🛡️ Full Stack Analysis & Security Guidelines
 
-### 🔑 Credentials & Secrets Management
-*   **Best Practice**: Avoid hardcoding authentication credentials (e.g. passwords, API keys) inside test files.
-*   **Implementation**: Retrieve values dynamically using environment variables (`System.getenv("TEST_USER_PASSWORD")`) or configure local `.properties` files that are ignored by Git. Keep `.env` and `config.properties` registered in your `.gitignore` file.
+> [!IMPORTANT]
+> **Credentials & Secrets Management**
+> Avoid hardcoding authentication credentials (e.g. passwords, API keys) inside test files. Retrieve values dynamically using environment variables (`System.getenv("TEST_USER_PASSWORD")`) or configure local `.properties` files that are ignored by Git. Keep `.env` and `config.properties` registered in your `.gitignore` file.
 
-### 🚦 Rate Limiting & Transient Errors
-*   **Best Practice**: Running integration tests continuously on live endpoints can trigger rate limits or web application firewalls.
-*   **Implementation**: Configure test retry rules (using libraries like `junit-pioneer`) and include back-off delays if execution volume is high.
+> [!TIP]
+> **Rate Limiting & Transient Errors**
+> Running integration tests continuously on live endpoints can trigger rate limits or web application firewalls. Configure test retry rules (using libraries like `junit-pioneer`) and include back-off delays if execution volume is high.
 
-### 🧪 Soft Assertions
-*   **Best Practice**: Avoid halting test execution on the first minor assertion failure if multiple data fields need to be checked.
-*   **Implementation**: Utilise JUnit 5 `Assertions.assertAll()` to execute multiple checks in a single test block and receive a aggregated report of all failures.
+> [!NOTE]
+> **Soft Assertions**
+> Avoid halting test execution on the first minor assertion failure if multiple data fields need to be checked. Utilise JUnit 5 `Assertions.assertAll()` to execute multiple checks in a single test block and receive an aggregated report of all failures.
 
-### 🧵 Parallel Test Execution
-*   **Best Practice**: Minimise build times by running independent integration tests in parallel.
-*   **Implementation**: Configure `junit.jupiter.execution.parallel.enabled = true` in `src/test/resources/junit-platform.properties`.
+> [!TIP]
+> **Parallel Test Execution**
+> Minimise build times by running independent integration tests in parallel. Configure `junit.jupiter.execution.parallel.enabled = true` in `src/test/resources/junit-platform.properties`.
 
-### 📝 Structured Logging
-*   **Best Practice**: Decouple test logging from raw standard console stdout.
-*   **Implementation**: Direct RestAssured logs to an SLF4J logger facade using logback or log4j2 for structured JSON parsing and aggregation.
+> [!NOTE]
+> **Structured Logging**
+> Decouple test logging from raw standard console stdout. Direct RestAssured logs to an SLF4J logger facade using logback or log4j2 for structured JSON parsing and aggregation.
 
 ---
 
